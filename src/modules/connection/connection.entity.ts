@@ -33,6 +33,7 @@ export class ConnectionEntity extends BaseEntity {
   @ManyToOne(
     type => RoomEntity,
     room => room.connections,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn()
   room: RoomEntity;

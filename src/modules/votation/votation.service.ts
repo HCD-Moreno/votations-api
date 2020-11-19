@@ -18,10 +18,8 @@ export class VotationService {
   constructor(
     @InjectRepository(VotationEntity)
     private readonly _votationRepository: Repository<VotationEntity>,
-    @InjectRepository(RoomEntity)
-    private readonly _roomRepository: Repository<RoomEntity>,
-    @InjectRepository(UserEntity)
-    private readonly _userRepository: Repository<UserEntity>,
+    @InjectRepository(VoteEntity)
+    private readonly _voteRepository: Repository<VoteEntity>,
   ) {}
 
   wss: Server;
@@ -55,16 +53,23 @@ export class VotationService {
 
     setTimeout(async () => {
       await this.closeVotation(created);
-    }, 15 * 1000);
+    }, 60 * 1000);
   }
 
   async closeVotation(votation: VotationEntity): Promise<void> {
-    await votation.reload();
+    votation = await this._votationRepository.findOne(votation.id, {relations: ['room']})
 
     const partial: Partial<VotationEntity> = {};
 
     const positivesVotes = votation.getVotes().positives;
     const abstentionsVotes = votation.getVotes().abstentions;
+
+    const missingVotes = votation.votes.filter(v => v.type === TypeVote.NONE)
+    const updateVotes = missingVotes.map( v => {
+      v.type = TypeVote.ABSTENTION
+      return v;
+    })
+    await this._voteRepository.save(updateVotes)
 
     switch(votation.type) {
       case VotationType.SIMPLE_MAJORITY_OF_PRESENTS:

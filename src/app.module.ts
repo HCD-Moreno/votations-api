@@ -11,6 +11,7 @@ import { VoteModule } from './modules/vote/vote.module';
 import { AppGateway } from './app.gateway';
 import { ConnectionModule } from './modules/connection/connection.module';
 import { ConfigMiddleware } from './config/middlewares/config.middleware';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { ConfigMiddleware } from './config/middlewares/config.middleware';
     VoteModule,
     ConnectionModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [AppGateway],
 })
 export class AppModule implements NestModule {

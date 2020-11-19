@@ -67,6 +67,7 @@ export class VotationEntity extends BaseEntity {
   @ManyToOne(
     type => RoomEntity,
     room => room.votations,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn()
   room: RoomEntity;

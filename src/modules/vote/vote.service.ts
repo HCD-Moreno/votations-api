@@ -51,5 +51,13 @@ export class VoteService {
     updateVote.type = vote;
 
     await this._voteRepository.save(updateVote);
+
+    await votation.reload();
+
+    const missingVotes = votation.votes.filter(v => v.type === TypeVote.NONE)
+
+    if(missingVotes.length === 0) {
+      this._votationService.closeVotation(votation)
+    }
   }
 }

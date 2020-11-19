@@ -11,7 +11,7 @@ import {
   Param,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SingupDto, SinginDto } from './dto';
+import { SinginDto } from './dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/read-auth.dto';
 import { GetUser } from './decorators/user.decorator';
@@ -24,12 +24,6 @@ import { Roles } from '../user/enums/roles.enum';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
-
-  @Post('signup')
-  @UsePipes(ValidationPipe)
-  async singup(@Body() singUpDto: SingupDto): Promise<AuthDto> {
-    return this._authService.singup(singUpDto);
-  }
 
   @Post('login')
   @UsePipes(ValidationPipe)

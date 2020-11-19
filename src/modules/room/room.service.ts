@@ -43,4 +43,10 @@ export class RoomService {
     
     return await this._roomRepository.save(newRoom);
   }
+
+  async deleteRooms() {
+    const rooms = await this._roomRepository.find()
+    const roomsId = rooms.map(r => (r.id))
+    return await this._roomRepository.delete(roomsId)
+  }
 }

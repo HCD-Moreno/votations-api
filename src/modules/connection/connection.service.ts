@@ -108,4 +108,10 @@ export class ConnectionService implements OnModuleInit{
 
     return await this._connectionRepository.save(connection);
   }
+
+  /* async deleteConnections() {
+    const connections = await this._connectionRepository.find()
+    const connectionsId = connections.map(c => c.id)
+    return await this._connectionRepository.delete(connectionsId)
+  } */
 }

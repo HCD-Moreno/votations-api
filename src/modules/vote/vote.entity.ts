@@ -16,7 +16,7 @@ export class VoteEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'enum', enum: TypeVote, default: TypeVote.ABSTENTION })
+  @Column({ type: 'enum', enum: TypeVote, default: TypeVote.NONE })
   type: TypeVote;
 
   @ManyToOne(type => UserEntity, { eager: true })
@@ -26,6 +26,7 @@ export class VoteEntity extends BaseEntity {
   @ManyToOne(
     type => VotationEntity,
     votation => votation.votes,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn()
   votation: VotationEntity;

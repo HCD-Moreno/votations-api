@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
-import { SingupDto, SinginDto } from './dto';
+import { SinginDto } from './dto';
 import { UserEntity } from './../user/user.entity';
 import { IJwtPayload } from './jwt-payload.interface';
 import { compare, genSalt, hash } from 'bcryptjs';
@@ -22,31 +22,6 @@ export class AuthService {
     private readonly _authRepository: AuthRepository,
     private readonly _jwtService: JwtService,
   ) {}
-
-  async singup(singupDto: SingupDto): Promise<AuthDto> {
-    const { username } = singupDto;
-    const userExist = await this._authRepository.findOne({
-      where: { username },
-    });
-
-    if (userExist) {
-      throw new ConflictException('already user email');
-    }
-
-    const user = await this._authRepository.signup(singupDto);
-
-    const payload: IJwtPayload = {
-      id: user.id,
-      password: user.password,
-    };
-
-    const token = await this._jwtService.sign(payload);
-
-    let authDto: AuthDto = plainToClass(AuthDto, user);
-    authDto.token = token;
-
-    return authDto;
-  }
 
   async singin(singinDto: SinginDto): Promise<AuthDto> {
     const { username, password } = singinDto;
@@ -77,6 +52,7 @@ export class AuthService {
       excludeExtraneousValues: true,
     });
     authDto.token = token;
+    authDto.avatar = user.getAvatarURL();
 
     return authDto;
   }

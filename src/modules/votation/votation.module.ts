@@ -4,9 +4,10 @@ import { VotationEntity } from './votation.entity';
 import { VotationService } from './votation.service';
 import { RoomEntity } from '../room/room.entity';
 import { UserEntity } from '../user/user.entity';
+import { VoteEntity } from '../vote/vote.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([VotationEntity, RoomEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([VotationEntity, VoteEntity])],
   providers: [VotationService],
   exports: [VotationService],
 })
